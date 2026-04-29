@@ -2,6 +2,7 @@ package com.study.profile_stack_api.domain.profile.dao;
 
 import com.study.profile_stack_api.domain.profile.entity.Profile;
 
+import java.util.List;
 import java.util.Optional;
 public interface ProfileDao {
 
@@ -21,4 +22,8 @@ public interface ProfileDao {
 
     // 이메일 중복 확인
     boolean existsByEmail(String email);
+
+    List<Profile> findAll(int offset, int limit);
+    long count();
+
 }

@@ -8,6 +8,7 @@ import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.service.ProfileService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,8 @@ public class ProfileController {
 
     // POST /api/vi/profiles
     @PostMapping
-    public  ResponseEntity<ApiResponse<ProfileResponse>> createProfile(
-            @RequestBody ProfileCreateRequest request
+    public ResponseEntity<ApiResponse<ProfileResponse>> createProfile(
+            @Valid @RequestBody ProfileCreateRequest request
     ) {
         ProfileResponse response = profileService.createProfile(request);
 
