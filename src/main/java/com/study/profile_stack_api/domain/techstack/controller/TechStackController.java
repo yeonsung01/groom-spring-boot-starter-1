@@ -2,6 +2,7 @@ package com.study.profile_stack_api.domain.techstack.controller;
 
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
 import com.study.profile_stack_api.domain.techstack.dto.request.TechStackUpdateRequest;
+import com.study.profile_stack_api.domain.techstack.dto.response.TechStackDeleteResponse;
 import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
 import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
@@ -38,9 +39,11 @@ public class TechStackController {
     public ResponseEntity<ApiResponse<Page<TechStackResponse>>> getTechStacks(
             @PathVariable Long profileId,
             @RequestParam Integer page,
-            @RequestParam Integer size
+            @RequestParam Integer size,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String proficiency
     ) {
-        Page<TechStackResponse> response = techStackService.getTechStacks(profileId, page, size);
+        Page<TechStackResponse> response = techStackService.getTechStacks(profileId, page, size, category, proficiency);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }
@@ -48,13 +51,18 @@ public class TechStackController {
     // GET /api/v1/profiles/{profileId}/tech-stacks/{id}
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<TechStackResponse>> getTechStack(
-            @PathVariable Long profileId,
-            @PathVariable Long id
+            @PathVariable Long profileId, // 프로필 ID
+            @PathVariable Long id         // 기술 스택 ID
     ) {
-        TechStackResponse response = techStackService.getTechStack(profileId, id);
 
+        // 서비스 호출
+        TechStackResponse response =
+                techStackService.getTechStack(profileId, id);
+
+        // 성공 읍답 반환
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
 
     // PUT /api/v1/profiles/{profileId}/tech-stacks/{id}
     @PutMapping("/{id}")
@@ -70,12 +78,14 @@ public class TechStackController {
 
     // DELETE /api/v1/profiles/{profileId}/tech-stacks/{id}
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteTechStack(
+    public ResponseEntity<ApiResponse<TechStackDeleteResponse>> deleteTechStack(
             @PathVariable Long profileId,
             @PathVariable Long id
     ) {
-        techStackService.deleteTechStack(profileId, id);
+        TechStackDeleteResponse response =
+                techStackService.deleteTechStack(profileId, id);
 
-        return ResponseEntity.ok(ApiResponse.success(null));
+                return ResponseEntity.ok(ApiResponse.success(response));
     }
+
 }

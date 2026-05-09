@@ -22,4 +22,27 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(result);
     }
+
+    @ExceptionHandler(ProfileNotFoundException.class)
+    public  ResponseEntity<Map<String, String>> handleProfileNotFound(ProfileNotFoundException e) {
+        Map<String, String> result = new HashMap<>();
+        result.put("code", "PROFILE_NOT_FOUND");
+        result.put("message", e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(result);
+    }
+
+    @ExceptionHandler(TechStackNotFoundException.class)
+    public  ResponseEntity<Map<String, String>> handleTechStackNotFound(TechStackNotFoundException e) {
+
+        Map<String, String> result = new HashMap<>();
+        result.put("code", "TECH_STACK_NOT_FOUND");
+        result.put("message", e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(result);
+    }
 }

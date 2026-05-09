@@ -6,6 +6,9 @@ import com.study.profile_stack_api.domain.profile.dto.request.ProfileUpdateReque
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileDeleteResponse;
 import com.study.profile_stack_api.domain.profile.dto.response.ProfileResponse;
 import com.study.profile_stack_api.domain.profile.service.ProfileService;
+import com.study.profile_stack_api.domain.techstack.dto.request.TechStackCreateRequest;
+import com.study.profile_stack_api.domain.techstack.dto.response.TechStackResponse;
+import com.study.profile_stack_api.domain.techstack.service.TechStackService;
 import com.study.profile_stack_api.global.common.ApiResponse;
 import com.study.profile_stack_api.global.common.Page;
 import jakarta.validation.Valid;
@@ -20,9 +23,11 @@ import java.util.List;
 public class ProfileController {
 
     private final ProfileService profileService; // 생성자 주입을 통한 DI, 객체 생성/관리는 Spring IoC 컨테이너가 담당
+    private final TechStackService techStackService;
 
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(ProfileService profileService, TechStackService techStackService) {
         this.profileService = profileService;
+        this.techStackService = techStackService;
     }
 
     // POST /api/vi/profiles
@@ -41,8 +46,10 @@ public class ProfileController {
     // GET /api/v1/profiles?page=0&size=10
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProfileResponse>>> getProfiles(
-            @RequestParam Integer page,
-            @RequestParam Integer size
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) String name
     ) {
         Page<ProfileResponse> response = profileService.getProfileWithPaging(page, size);
 
@@ -90,4 +97,5 @@ public class ProfileController {
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
 }

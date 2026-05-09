@@ -140,12 +140,47 @@ public class ProfileDaoImpl implements ProfileDao {
     // 프로필 수정 - 다음 단계에서 구현
     @Override
     public Profile update(Profile profile) {
-        return null;
+        String sql = """
+                UPDATE profile
+                SET name = ?,
+                    email = ?,
+                    bio = ?,
+                    position = ?,
+                    career_years = ?,
+                    github_url = ?,
+                    blog_url = ?,
+                    updated_at = ?
+                WHERE id = ?
+                """;
+
+        LocalDateTime now = LocalDateTime.now();
+
+        jdbcTemplate.update(sql,
+                profile.getName(),
+                profile.getEmail(),
+                profile.getBio(),
+                profile.getPosition().name(),
+                profile.getCareerYears(),
+                profile.getGithubUrl(),
+                profile.getBlogUrl(),
+                now,
+                profile.getId()
+        );
+
+        profile.setUpdatedAt(now);
+
+        return profile;
     }
 
     // 프로필 삭제 - 다음 단계에서 구현
     @Override
     public boolean deleteById(Long id) {
-        return false;
+        String sql = """
+                DELETE FROM profile
+                WHERE id = ?
+                """;
+        int affectedRows = jdbcTemplate.update(sql,id);
+
+        return affectedRows >0;
     }
 }

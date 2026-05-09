@@ -9,6 +9,7 @@ import com.study.profile_stack_api.domain.profile.entity.Position;
 import com.study.profile_stack_api.domain.profile.entity.Profile;
 import com.study.profile_stack_api.global.common.Page;
 import com.study.profile_stack_api.global.exception.DuplicateEmailException;
+import com.study.profile_stack_api.global.exception.ProfileNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -69,7 +70,13 @@ public class ProfileService {
     }
 
     public ProfileDeleteResponse deleteProfileById(Long id) {
-        return ProfileDeleteResponse.of(id); // 다음에 구현
+        boolean deleted = profileDao.deleteById(id);
+
+        if (!deleted) {
+            throw new ProfileNotFoundException(id);
+        }
+
+        return ProfileDeleteResponse.of(id);
     }
 
     public ProfileResponse createProfile(ProfileCreateRequest request) {
